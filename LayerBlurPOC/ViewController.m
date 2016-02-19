@@ -57,7 +57,7 @@
 	// blur it
 	CIFilter *blurFilter = [CIFilter filterWithName:@"CIGaussianBlur"];
 	[blurFilter setValue:[CIImage imageWithCGImage:testImage.CGImage] forKey:@"inputImage"];
-	[blurFilter setValue:@2.5f forKey:@"inputRadius"];
+	[blurFilter setValue:@4.0f forKey:@"inputRadius"];
 	CIImage *filterOutput = [blurFilter valueForKey:@"outputImage"];
 	// get just the original part of the new image (it's bigger)
 	CGRect rect = [filterOutput extent];
@@ -113,9 +113,11 @@
 	return YES;
 }
 
+// TODO: look at what happens if the view moves or changes size after did begin editing, what about scrolling (does scrolling make sense anyway if we are blurring the rest of the form?)
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
-	// TODO: look at what happens if the view moves after did begin editing
+	[textField setHidden:YES];
 	[self addBlurView];
+	[textField setHidden:NO];
 	[self.view addSubview:_placeholderView];
 	[self.view exchangeSubviewAtIndex:[self.view.subviews indexOfObject:_placeholderView] withSubviewAtIndex:[self.view.subviews indexOfObject:textField]];
 }
